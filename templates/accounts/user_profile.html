@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="bg-white rounded-2xl shadow p-6 mb-6">
+    <div class="flex items-center gap-6">
+        <div class="w-20 h-20 bg-blue-600 text-white rounded-full flex items-center justify-center text-3xl">
+            {{ profile_user.username|first|upper }}
+        </div>
+
+        <div>
+            <h2 class="text-2xl font-semibold">
+                {{ profile_user.username }}
+            </h2>
+            <p class="text-gray-500">
+                {{ profile.department }} | Year {{ profile.year }}
+            </p>
+            <p class="mt-2 text-gray-700">
+                {{ profile.bio }}
+            </p>
+        </div>
+    </div>
+
+    {% if not is_self %}
+        <div class="mt-6 flex gap-4">
+
+        {% if is_following %}
+            <span class="bg-blue-100 text-blue-700 px-4 py-2 rounded-full">
+                Following
+            </span>
+        {% endif %}
+
+        {% if is_mutual %}
+            
+            <a href="{% url 'chat' profile_user.id %}"
+                class="bg-green-600 text-white px-5 py-2 rounded-full hover:bg-green-700 transition">
+                Chat
+            </a>
+
+        {% elif is_following %}
+            <span class="bg-blue-100 text-blue-700 px-4 py-2 rounded-full">
+                Following
+            </span>
+
+        {% elif has_requested %}
+            <span class="bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full">
+                Request Sent
+            </span>
+
+        {% else %}
+            <a href="{% url 'send_request' profile_user.id %}"
+                class="bg-blue-600 text-white px-5 py-2 rounded-full hover:bg-blue-700 transition">
+                Connect
+            </a>
+        {% endif %}
+
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

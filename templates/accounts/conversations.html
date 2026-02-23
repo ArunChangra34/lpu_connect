@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="max-w-3xl mx-auto bg-white rounded-2xl shadow p-6">
+    <h2 class="text-xl font-semibold mb-6">Your Conversations</h2>
+
+    {% for convo in conversations %}
+
+        <div class="flex justify-between items-center border-b py-4">
+
+            {% if convo.user1 == user %}
+                <a href="{% url 'chat' convo.user2.id %}" 
+                   class="font-medium hover:text-blue-600">
+                    {{ convo.user2.username }}
+                </a>
+            {% else %}
+                <a href="{% url 'chat' convo.user1.id %}" 
+                   class="font-medium hover:text-blue-600">
+                    {{ convo.user1.username }}
+                </a>
+            {% endif %}
+
+            <span class="text-sm text-gray-500">
+                View Chat →
+            </span>
+
+        </div>
+
+    {% empty %}
+        <p class="text-gray-500">
+            No conversations yet.
+        </p>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

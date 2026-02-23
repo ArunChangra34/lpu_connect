@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="bg-white rounded-xl shadow p-6 mb-6">
+    <div class="flex items-center gap-6">
+        <div class="w-20 h-20 bg-blue-600 text-white rounded-full flex items-center justify-center text-3xl">
+            {{ user.username|first|upper }}
+        </div>
+
+        <div>
+            <h2 class="text-2xl font-semibold">{{ user.username }}</h2>
+            <p class="text-gray-500">{{ profile.department }} | Year {{ profile.year }}</p>
+            <p class="mt-2 text-gray-700">{{ profile.bio }}</p>
+        </div>
+    </div><br>
+    <a href="{% url 'edit_profile' %}"
+        class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition">
+        Edit Profile
+    </a>
+    <div class="mt-4 flex gap-3">
+
+        <a href="{% url 'requests' %}"
+            class="relative bg-purple-600 text-white px-5 py-2 rounded-full hover:bg-purple-700 transition">
+            Requests
+
+            {% if request_count > 0 %}
+                <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
+                {{ request_count }}
+                </span>
+            {% endif %}
+        </a>
+
+    </div>
+</div>
+
+<div class="grid md:grid-cols-2 gap-6">
+
+    <!-- Followers -->
+    <div class="bg-white rounded-xl shadow p-5">
+        <h3 class="font-semibold mb-4">
+            Followers ({{ followers.count }})
+        </h3>
+
+        {% for f in followers %}
+        <div class="flex justify-between py-2 border-b">
+            <a href="{% url 'user_profile' f.follower.id %}" 
+               class="hover:text-blue-600">
+                {{ f.follower.username }}
+            </a>
+
+            <a href="{% url 'chat' f.follower.id %}"
+               class="text-sm bg-gray-800 text-white px-3 py-1 rounded-full">
+                Chat
+            </a>
+        </div>
+        {% empty %}
+        <p>No followers yet.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Following -->
+    <div class="bg-white rounded-xl shadow p-5">
+        <h3 class="font-semibold mb-4">
+            Following ({{ following.count }})
+        </h3>
+
+        {% for f in following %}
+        <div class="py-2 border-b">
+            <a href="{% url 'user_profile' f.following.id %}" 
+               class="hover:text-blue-600">
+                {{ f.following.username }}
+            </a>
+        </div>
+        {% empty %}
+        <p>Not following anyone.</p>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}

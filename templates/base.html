@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LPU Connect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        function toggleMenu() {
+            document.getElementById("mobileMenu").classList.toggle("hidden");
+        }
+
+        function toggleProfile() {
+            document.getElementById("profileDropdown").classList.toggle("hidden");
+        }
+    </script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+<!-- NAVBAR -->
+<nav class="bg-white shadow-md fixed w-full z-50">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="flex justify-between items-center h-16">
+
+            <!-- Logo -->
+            <div class="flex items-center gap-6">
+                <a href="{% url 'home' %}" class="text-xl font-bold text-blue-600">
+                    LPU Connect
+                </a>
+
+                {% if user.is_authenticated %}
+                <!-- Search Bar -->
+                <form method="get" action="{% url 'home' %}" class="hidden md:block">
+                    <input type="text" name="q"
+                           placeholder="Search students..."
+                           class="bg-gray-100 px-4 py-1.5 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 w-64">
+                </form>
+                {% endif %}
+            </div>
+
+            {% if user.is_authenticated %}
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center gap-6">
+
+                <a href="{% url 'home' %}" class="hover:text-blue-600 transition">Home</a>
+
+                <a href="{% url 'profile' %}" class="hover:text-blue-600 transition">
+                    Profile
+                </a>
+
+                <a href="{% url 'messages' %}" class="hover:text-blue-600">
+                    Messages
+                </a>
+
+                <!-- Profile Dropdown -->
+                <div class="relative">
+                    <button onclick="toggleProfile()" 
+                            class="flex items-center gap-2 focus:outline-none">
+                        <div class="w-8 h-8 bg-blue-600 rounded-full text-white flex items-center justify-center">
+                            {{ user.username|first|upper }}
+                        </div>
+                    </button>
+
+                    <div id="profileDropdown"
+                         class="hidden absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg overflow-hidden">
+                        <a href="{% url 'profile' %}" 
+                           class="block px-4 py-2 hover:bg-gray-100">My Profile</a>
+
+                        <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button class="w-full text-left px-4 py-2 hover:bg-gray-100">
+                                Logout
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Button -->
+            <div class="md:hidden">
+                <button onclick="toggleMenu()">
+                    ☰
+                </button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="hidden md:hidden px-6 pb-4">
+        <a href="{% url 'home' %}" class="block py-2">Home</a>
+        <a href="{% url 'profile' %}" class="block py-2">Profile</a>
+
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button class="block py-2 text-left w-full">
+                Logout
+            </button>
+        </form>
+    </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div class="pt-24 max-w-6xl mx-auto px-4">
+    {% block content %}
+
+    {% endblock %}
+</div>
+
+</body>
+</html>

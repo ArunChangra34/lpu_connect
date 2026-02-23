@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="bg-white rounded-xl shadow p-6 max-w-3xl mx-auto">
+
+    <h2 class="text-xl font-semibold mb-6">
+        Chat with {{ other_user.username }}
+    </h2>
+
+    <div class="space-y-4 max-h-96 overflow-y-auto mb-6">
+
+        {% for message in messages %}
+        <div class="{% if message.sender == user %}text-right{% endif %}">
+            <div class="inline-block px-4 py-2 rounded-2xl
+                {% if message.sender == user %}
+                    bg-blue-600 text-white
+                {% else %}
+                    bg-gray-200 text-gray-800
+                {% endif %}">
+                {{ message.content }}
+            </div>
+        </div>
+        {% empty %}
+        <p>No messages yet.</p>
+        {% endfor %}
+
+    </div>
+
+    <form method="post" class="flex gap-3">
+        {% csrf_token %}
+        <input type="text" name="content"
+               class="flex-1 border rounded-full px-4 py-2 focus:ring-2 focus:ring-blue-500"
+               placeholder="Type a message..." required>
+
+        <button class="bg-blue-600 text-white px-6 rounded-full hover:bg-blue-700">
+            Send
+        </button>
+    </form>
+
+</div>
+
+{% endblock %}
