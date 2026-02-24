@@ -21,3 +21,7 @@ if username and not User.objects.filter(username=username).exists():
 else:
     print("Superuser already exists or missing env variables.")
 END
+
+pip install -r requirements.txt
+python manage.py collectstatic --noinput
+python manage.py migrate
