@@ -118,4 +118,7 @@ class Message(models.Model):
         return f"{self.sender}: {self.content[:20]}"
 
 
-
+class Post(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)

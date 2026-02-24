@@ -238,3 +238,20 @@ def conversations_view(request):
         "accounts/conversations.html",
         {"conversations": conversations}
     )
+
+from .models import Post
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def home_feed(request):
+
+    if request.method == "POST":
+        content = request.POST.get("content")
+        if content:
+            Post.objects.create(user=request.user, content=content)
+
+    posts = Post.objects.all().order_by("?")
+
+    return render(request, "accounts/home_feed.html", {
+        "posts": posts
+    })
