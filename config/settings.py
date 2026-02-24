@@ -12,6 +12,22 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 
+
+import os
+import dj_database_url
+
+SECRET_KEY = os.environ.get("SECRET_KEY")
+
+DEBUG = os.environ.get("DEBUG") == "True"
+
+ALLOWED_HOSTS = ["*"]
+
+DATABASES = {
+    "default": dj_database_url.config(
+        default=os.environ.get("DATABASE_URL")
+    )
+}
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,7 +41,6 @@ SECRET_KEY = 'django-insecure-af6htlnv0!+@(42e@p!(nvv(8na!x5-6cfjrztn7)4dff#1^2p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["*"]
 
 AUTH_USER_MODEL = 'accounts.User'
 
@@ -122,4 +137,17 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'signup'
+
+import os
+
+if os.environ.get("DJANGO_SUPERUSER_USERNAME"):
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+
+    if not User.objects.filter(username=os.environ.get("DJANGO_SUPERUSER_USERNAME")).exists():
+        User.objects.create_superuser(
+            username=os.environ.get("DJANGO_SUPERUSER_USERNAME"),
+            email=os.environ.get("DJANGO_SUPERUSER_EMAIL"),
+            password=os.environ.get("DJANGO_SUPERUSER_PASSWORD"),
+        )
 
