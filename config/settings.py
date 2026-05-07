@@ -22,14 +22,17 @@ DEBUG = os.environ.get("DEBUG") == "True"
 
 ALLOWED_HOSTS = ["*"]
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 DATABASES = {
-    "default": dj_database_url.config(
-        default=os.environ.get("DATABASE_URL")
+    'default': dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600
     )
 }
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -136,6 +139,7 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
